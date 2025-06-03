@@ -1,0 +1,22 @@
+.menu-link{
+  text-decoration: none;
+  background-color: var(--secondary-color);
+  padding: 10px 20px;
+  color: var(--primary-color);
+  transition: all 0.3s ease;
+}
+
+.menu-link:hover{
+    background-color: var(--tertiary-color);
+    color: var(--accent-color);
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.navigation-block{
+   
+}
+
+.navigation-block ul {
+   display: flex;
+   gap: 1rem;
+}
