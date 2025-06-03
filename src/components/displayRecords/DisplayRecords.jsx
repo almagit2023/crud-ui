@@ -10,15 +10,21 @@ import { GiEmptyChessboard } from "react-icons/gi";
 
 export default function DisplayRecords() {
   const [productData, setProductData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const displayRecords = () => {
     axios
       .get(rest_api_url)
       .then((res) => {
         setProductData(res.data.products);
         console.log(productData);
+        setTimeout(()=>{
+            setLoading(false);
+        }, 1000)
       })
       .catch((error) => {
         console.log(error);
+        setLoading(false);
       });
   };
 
@@ -40,8 +46,16 @@ export default function DisplayRecords() {
       });
   };
 
-
-
+  if (loading) {
+    return (
+      <div className="loading-message">
+        Loading products
+        <span className="loading-point"></span>
+        <span className="loading-point"></span>
+        <span className="loading-point"></span>
+      </div>
+    );
+  }
   return (
     <div>
       {productData && productData.length > 0 ? (
@@ -63,9 +77,7 @@ export default function DisplayRecords() {
                 <td>{item.price}</td>
                 <td>
                   <Link to={`/${item._id}`}>
-                    <MdModeEdit
-                      className="product-edit-icon"
-                    />
+                    <MdModeEdit className="product-edit-icon" />
                   </Link>
                 </td>
                 <td>

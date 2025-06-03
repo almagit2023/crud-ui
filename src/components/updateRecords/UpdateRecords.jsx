@@ -11,6 +11,8 @@ export default function UpdateRecords() {
   const [updatedPrice, setUpdatedPrice] = useState("");
   const [productToUpdate, setProductToUpdate] = useState({});
 
+  const [loading, setLoading] = useState(true);
+
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -26,9 +28,13 @@ export default function UpdateRecords() {
 
           console.log(res.data.product);
           console.log("Product To Update : ", productToUpdate);
+          setTimeout(() => {
+          setLoading(false);
+        }, 1000);
         })
         .catch((error) => {
           console.error(error);
+          setLoading(false);
         });
     } catch (error) {
       console.error(error);
@@ -54,7 +60,7 @@ export default function UpdateRecords() {
       .then((res) => {
         console.log("Record has been updated...");
         console.log("New Record is : ", res.data);
-        navigate('/home')
+        navigate("/home");
       })
       .catch((error) => {
         console.log("Error updating Product...", error);
@@ -64,6 +70,16 @@ export default function UpdateRecords() {
 
   console.log("Coming or Not : ", productToUpdate.name);
 
+  if (loading) {
+    return (
+      <div className="loading-message">
+        Loading products
+        <span className="loading-point"></span>
+        <span className="loading-point"></span>
+        <span className="loading-point"></span>
+      </div>
+    );
+  }
   return (
     <div>
       <h2 className="create-product-heading">Update Product</h2>
