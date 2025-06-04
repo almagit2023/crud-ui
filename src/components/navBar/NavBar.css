@@ -25,3 +25,15 @@
    display: flex;
    gap: 1rem;
 }
+
+.profile-display{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-logout{
+  border: 1px solid gray;
+}
+
