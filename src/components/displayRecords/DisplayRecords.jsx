@@ -10,21 +10,20 @@ import { GiEmptyChessboard } from "react-icons/gi";
 
 export default function DisplayRecords() {
   const [productData, setProductData] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   const displayRecords = () => {
     axios
-      .get(rest_api_url)
+      .get(rest_api_url, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
       .then((res) => {
         setProductData(res.data.products);
         console.log(productData);
-        setTimeout(()=>{
-            setLoading(false);
-        }, 1000)
       })
       .catch((error) => {
         console.log(error);
-        setLoading(false);
       });
   };
 
@@ -35,7 +34,11 @@ export default function DisplayRecords() {
   const handleProductDelete = (id) => {
     console.log(id);
     axios
-      .delete(`${rest_api_url}/${id}`)
+      .delete(`${rest_api_url}/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
       .then((res) => {
         console.log("Deleted Product with ID : ", id);
         window.location.reload(true);
@@ -46,16 +49,6 @@ export default function DisplayRecords() {
       });
   };
 
-  if (loading) {
-    return (
-      <div className="loading-message">
-        Loading products
-        <span className="loading-point"></span>
-        <span className="loading-point"></span>
-        <span className="loading-point"></span>
-      </div>
-    );
-  }
   return (
     <div>
       {productData && productData.length > 0 ? (
@@ -94,9 +87,8 @@ export default function DisplayRecords() {
         <div className="empty-product-basket">
           <GiEmptyChessboard className="empty-product-basket-icon" />
           <h3>
-            Your Basket is Empty &nbsp;!! &nbsp;{" "}
-            <Link to="/create"> &nbsp; Click Here </Link>
-            &nbsp; To Add Products
+            Your Basket is Empty!!{" "}
+            <Link to="/create"> Click Here </Link> To Add Products
           </h3>
         </div>
       )}

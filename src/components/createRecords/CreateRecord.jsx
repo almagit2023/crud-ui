@@ -16,20 +16,23 @@ export default function CreateRecord() {
       category: newCategory,
       price: newPrice,
     };
-
     console.log(createProductData);
-
-    axios.post(rest_api_url,createProductData)
-    .then((res)=>{
-       console.log("New Record has been added...");
-       console.log("New Record is : ", res.data);
-       window.location.reload(false);
+    axios.post(rest_api_url, createProductData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
     })
-    .catch((error)=>{
+      .then((res) => {
+        console.log("New Record has been added...");
+        console.log("New Record is : ", res.data);
+        window.location.reload(false);
+      })
+      .catch((error) => {
         console.log("Error creating Product...", error);
-        console.log(createProductData)
-    })
+        console.log(createProductData);
+      });
   };
+
   return (
     <div>
       <h2 className="create-product-heading">Create a Product</h2>
@@ -42,9 +45,8 @@ export default function CreateRecord() {
             onChange={(e) => setNewName(e.target.value)}
           />
         </div>
-
         <div className="form-group">
-          <label htmlFor="">Enter Product Category </label> <br />
+          <label htmlFor="">Enter Product Category </label> ????????<br />
           <select onChange={(e) => setNewCategory(e.target.value)}>
             <option value="">Select Category</option>
             <option value="Female Dress">Female Dress</option>
@@ -57,7 +59,6 @@ export default function CreateRecord() {
             <option value="Male Sunglass">Male Sunglass</option>
           </select>
         </div>
-
         <div className="form-group">
           <label htmlFor="">Enter Price</label> <br />
           <input

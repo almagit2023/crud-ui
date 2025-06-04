@@ -10,31 +10,27 @@ export default function UpdateRecords() {
   const [updatedCategory, setUpdatedCategory] = useState("");
   const [updatedPrice, setUpdatedPrice] = useState("");
   const [productToUpdate, setProductToUpdate] = useState({});
-
-  const [loading, setLoading] = useState(true);
-
   const { id } = useParams();
   const navigate = useNavigate();
 
   const getProductData = async () => {
     try {
       axios
-        .get(`${rest_api_url}/${id}`)
+        .get(`${rest_api_url}/${id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
         .then((res) => {
           setProductToUpdate(res.data.product);
           setUpdatedName(res.data.product.name);
           setUpdatedCategory(res.data.product.category);
           setUpdatedPrice(res.data.product.price);
-
           console.log(res.data.product);
           console.log("Product To Update : ", productToUpdate);
-          setTimeout(() => {
-          setLoading(false);
-        }, 1000);
         })
         .catch((error) => {
           console.error(error);
-          setLoading(false);
         });
     } catch (error) {
       console.error(error);
@@ -52,15 +48,17 @@ export default function UpdateRecords() {
       category: updatedCategory,
       price: updatedPrice,
     };
-
     console.log(updatedProductData);
-
     axios
-      .put(`${rest_api_url}/${id}`, updatedProductData)
+      .put(`${rest_api_url}/${id}`, updatedProductData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
       .then((res) => {
         console.log("Record has been updated...");
         console.log("New Record is : ", res.data);
-        navigate("/home");
+        navigate('/home');
       })
       .catch((error) => {
         console.log("Error updating Product...", error);
@@ -69,17 +67,6 @@ export default function UpdateRecords() {
   };
 
   console.log("Coming or Not : ", productToUpdate.name);
-
-  if (loading) {
-    return (
-      <div className="loading-message">
-        Loading products
-        <span className="loading-point"></span>
-        <span className="loading-point"></span>
-        <span className="loading-point"></span>
-      </div>
-    );
-  }
   return (
     <div>
       <h2 className="create-product-heading">Update Product</h2>
@@ -93,7 +80,6 @@ export default function UpdateRecords() {
             value={updatedName}
           />
         </div>
-
         <div className="form-group">
           <label htmlFor="">Change Product Category </label> <br />
           <select
@@ -111,7 +97,6 @@ export default function UpdateRecords() {
             <option value="Male Sunglass">Male Sunglass</option>
           </select>
         </div>
-
         <div className="form-group">
           <label htmlFor="">Update Price</label> <br />
           <input
